@@ -1,0 +1,106 @@
+@model List<Student>
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Students</title>
+</head>
+<body>
+<div>
+    <table>
+        <tr>
+            <th>Add Student</th>
+            <th>Delete Student</th>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Add Student</button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Student</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/Students/addStudent">
+                    <label for="studentLName">Last Name:</label>
+                    <input type="text" id="studentLName" name="sLName" required><br><br>
+                    <label for="studentFName">First Name:</label>
+                    <input type="text" id="studentFName" name="sFName" required><br><br>
+                    <label for="email">Email ID:</label><br>
+                    <textarea id="email" name="sEmail" required></textarea><br><br>
+                    <label for="phoneNumber">Phone Number:</label><br>
+                    <textarea id="phoneNumber" name="sPhoneNum" required></textarea><br><br>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                @* <button type="button" class="btn btn-primary">Save changes</button> *@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Delete Student</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" action="/Students/deleteStudent">
+                                                        <label for="studentID">Student ID:</label>
+                                                        <input type="text" id="studentID" name="sid" required><br><br>
+                                                        <input type="submit" value="Submit">
+                                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    @* <button type="button" class="btn btn-primary">Save changes</button> *@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<div>
+    <h1>Students List</h1>
+    <table class="table-bordered align-baseline">
+        <tr>
+            <th>Student ID</th>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Email ID</th>
+            <th>Phone Number</th>
+        </tr>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>
+                    <p>@s.studentID</p></td>
+                <td>
+                    <p>@s.lName</p></td>
+                <td>
+                    <p>@s.fName</p></td>
+                <td>
+                    <p>@s.emailID</p></td>
+                <td>
+                    <p>@s.phoneNumber</p></td>
+            </tr>
+        }
+    </table>
+</div>
+</body>
+</html>

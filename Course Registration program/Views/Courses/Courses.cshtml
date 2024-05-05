@@ -1,0 +1,176 @@
+@model List<Course>
+
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Courses</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+        $(document).ready(function(){
+            $('.view-students-btn').click(function() {
+                // Get the course ID from the button's data attribute
+                var courseId = $(this).data('course-id');
+        
+                // Make AJAX request to fetch student data
+                $.ajax({
+                    url: '/Courses/studentCourseMapping', // Replace ControllerName with your actual controller name
+                    type: 'GET',
+                    data: { cid: courseId }, // Pass the course ID to the action method
+                    success: function(studentsData) {
+                        console.log("Number of students:", studentsData.length);
+    
+                        // Dynamically populate the modal with student data
+                        var modalId = '#exampleModal-' + courseId;
+                        var studentsTable = $(modalId + ' .modal-body #studentsTable');
+                        studentsTable.empty(); // Clear previous data
+                        $.each(studentsData, function(index, student) {
+                            var row = $('<tr>');
+                            row.append($('<td>').text(student.studentID));
+                            row.append($('<td>').text(student.lName));
+                            row.append($('<td>').text(student.fName));
+                            row.append($('<td>').text(student.emailID));
+                            row.append($('<td>').text(student.phoneNumber));
+                            studentsTable.append(row);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error fetching student data: ' + error);
+                    }
+                });
+            });
+        });
+        </script>
+</head>
+<body>
+<div>
+    <table>
+        <tr>
+            <th>Add Course</th>
+            <th>Delete Course</th>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Add Course</button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Course</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Course</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/Courses/addCourse">
+                    <label for="courseNumber">Course Number:</label>
+                    <input type="text" id="courseNumber" name="cnum" required><br><br>
+                    <label for="courseName">Course Name:</label>
+                    <input type="text" id="courseName" name="cname" required><br><br>
+                    <label for="description">Description:</label><br>
+                    <textarea id="description" name="cdesc" required></textarea><br><br>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                @* <button type="button" class="btn btn-primary">Save changes</button> *@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Delete Course</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" action="/Courses/deleteCourse">
+                                                        <label for="courseID">Course ID:</label>
+                                                        <input type="text" id="courseID" name="cid" required><br><br>
+                                                        <input type="submit" value="Submit">
+                                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    @* <button type="button" class="btn btn-primary">Save changes</button> *@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<div>
+    <h1>Courses List</h1>
+    <table class="table-bordered align-baseline">
+        <tr>
+            <th>Course ID</th>
+            <th>Course Number</th>
+            <th>Course Name</th>
+            <th>Description</th>
+            <th>Students in the Course</th>
+        </tr>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>
+                    <p>@c.courseID</p></td>
+                <td>
+                    <p>@c.courseNumber</p></td>
+                <td>
+                    <p>@c.courseName</p></td>
+                <td>
+                    <p>@c.description</p></td>
+                <td>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary view-students-btn" data-bs-toggle="modal" data-bs-target="#exampleModal-@c.courseID" data-course-id="@c.courseID">
+                                           View Students
+                                       </button>
+                
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal-@c.courseID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Students in @c.courseName</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table class="table-bordered align-baseline">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Student ID</th>
+                                                        <th>Last Name</th>
+                                                        <th>First Name</th>
+                                                        <th>Email</th>
+                                                        <th>Phone Number</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="studentsTable">
+                                                    <!-- Student data will be dynamically populated here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+            </tr>
+        }
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+@model List<Instructor>
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Instructors</title>
+</head>
+<body>
+<div>
+    <table>
+        <tr>
+            <th>Add Instructor</th>
+            <th>Delete Instructor</th>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Add Instructor</button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Instructor</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Instructor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/Instructors/addInstructor">
+                    <label for="instructorLName">Last Name:</label>
+                    <input type="text" id="instructorLName" name="iLName" required><br><br>
+                    <label for="instructorFName">First Name:</label>
+                    <input type="text" id="instructorFName" name="iFName" required><br><br>
+                    <label for="email">Email ID:</label><br>
+                    <textarea id="email" name="iEmail" required></textarea><br><br>
+                    <label for="courseID">Course ID:</label><br>
+                    <textarea id="courseID" name="icid" required></textarea><br><br>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                @* <button type="button" class="btn btn-primary">Save changes</button> *@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Delete Instructor</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" action="/Instructors/deleteInstructor">
+                                                        <label for="instructorID">Instructor ID:</label>
+                                                        <input type="text" id="instructorID" name="iid" required><br><br>
+                                                        <input type="submit" value="Submit">
+                                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    @* <button type="button" class="btn btn-primary">Save changes</button> *@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+<div>
+    <h1>Instructors List</h1>
+    <table class="table-bordered align-baseline">
+        <tr>
+            <th>Instructor ID</th>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Email ID</th>
+            <th>Course Name</th>
+        </tr>
+        @foreach (var m in Model)
+        {
+            <tr>
+                <td>
+                    <p>@m.instructorID</p></td>
+                <td>
+                    <p>@m.lName</p></td>
+                <td>
+                    <p>@m.fName</p></td>
+                <td>
+                    <p>@m.emailID</p></td>
+                <td>
+                    <p>@m.courseID</p></td>
+            </tr>
+        }
+    </table>
+</div>
+</body>
+</html>
